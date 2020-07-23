@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: demo-ELKB
+server:
+  port: 8081
+#logging:
+#  path: "./logs"
+#  level:
+#    com.taurus: debug

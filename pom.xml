@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.taurus</groupId>
+	<artifactId>fire-cloud</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>fire-cloud</name>
+	<description>fire cloud</description>
+	<packaging>pom</packaging>
+
+
+	<modules>
+		<module>yd-buniness</module>
+		<module>yd-common</module>
+		<module>gateway</module>
+		<module>yd-modules</module>
+	</modules>
+
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>1.8</java.version>
+		<guava.version>20.0</guava.version>
+		<junit.version>4.12</junit.version>
+		<lombok.version>1.16.20</lombok.version>
+		<swagger.version>2.7.0</swagger.version>
+		<alibaba-fastjson.version>1.2.59</alibaba-fastjson.version>
+		<alibaba-fastjson.version>1.2.59</alibaba-fastjson.version>
+		<javaee-api.version>8.0</javaee-api.version>
+		<ribbon-core.version>2.7.17</ribbon-core.version>
+		<feign-core.version>10.4.0</feign-core.version>
+		<spring-cloud-alibaba-dependencies.version>0.2.1.RELEASE</spring-cloud-alibaba-dependencies.version>
+		<spring-boot-dependencies.version>2.1.4.RELEASE</spring-boot-dependencies.version>
+		<spring-cloud-dependencies.version>Greenwich.SR2</spring-cloud-dependencies.version>
+		<spring-cloud-starter-alibaba-nacos-discovery.version>0.2.2.RELEASE</spring-cloud-starter-alibaba-nacos-discovery.version>
+		<nacos-client.version>1.1.0</nacos-client.version>
+	</properties>
+
+
+	<dependencies>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>${guava.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>${lombok.version}</version>
+		</dependency>
+	</dependencies>
+
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-dependencies</artifactId>
+				<version>${spring-boot-dependencies.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud-dependencies.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-alibaba-dependencies</artifactId>
+				<version>${spring-cloud-alibaba-dependencies.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
+
+
+			<dependency>
+				<groupId>com.alibaba</groupId>
+				<artifactId>fastjson</artifactId>
+				<version>${alibaba-fastjson.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+				<version>${spring-cloud-starter-alibaba-nacos-discovery.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>com.alibaba.nacos</groupId>
+						<artifactId>nacos-client</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>com.alibaba.nacos</groupId>
+				<artifactId>nacos-client</artifactId>
+				<version>${nacos-client.version}</version>
+			</dependency>
+
+
+			<dependency>
+				<groupId>org.dromara</groupId>
+				<artifactId>soul-client-springcloud</artifactId>
+				<version>2.1.2-RELEASE</version>
+			</dependency>
+
+
+			<!--<dependency>-->
+				<!--<groupId>com.taurus</groupId>-->
+				<!--<artifactId>yd-modules</artifactId>-->
+				<!--<version>${project.version}</version>-->
+			<!--</dependency>-->
+
+
+			<!--<dependency>-->
+				<!--<groupId>com.taurus</groupId>-->
+				<!--<artifactId>yd-common</artifactId>-->
+				<!--<version>${project.version}</version>-->
+			<!--</dependency>-->
+
+			<!--<dependency>-->
+				<!--<groupId>com.taurus</groupId>-->
+				<!--<artifactId>gateway</artifactId>-->
+				<!--<version>${project.version}</version>-->
+			<!--</dependency>-->
+		</dependencies>
+	</dependencyManagement>
+
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+
+
+
+</project>
