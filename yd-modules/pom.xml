@@ -12,6 +12,8 @@
 
     <modules>
         <module>yd-moduleone</module>
+        <module>yd-dbdoc-generate</module>
+        <module>yd-code-generate</module>
     </modules>
     <dependencyManagement>
         <dependencies>

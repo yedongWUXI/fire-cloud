@@ -1,11 +1,16 @@
 package com.purgeteam.dispose.starter.exception.error.details;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
 /**
  * 业务通用异常枚举
  *
  * @author purgeyao
  * @since 1.0
  */
+@NoArgsConstructor
+@AllArgsConstructor
 public enum BusinessErrorCode {
 
     /**
@@ -14,21 +19,10 @@ public enum BusinessErrorCode {
     BUSINESS_ERROR("CLOUD800", "业务异常"),
     ;
 
-    private String code;
+    public String code;
 
-    private String message;
+    public String msg;
 
-    public String getCode() {
-        return code;
-    }
 
-    public String getMessage() {
-        return message;
-    }
-
-    BusinessErrorCode(String code, String message) {
-        this.code = code;
-        this.message = message;
-    }
 
 }

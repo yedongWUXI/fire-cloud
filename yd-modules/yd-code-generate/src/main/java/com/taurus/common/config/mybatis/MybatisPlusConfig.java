@@ -1,4 +1,4 @@
-package com.taurus.config.mybatis;
+package com.taurus.common.config.mybatis;
 
 
 import com.baomidou.mybatisplus.core.injector.ISqlInjector;

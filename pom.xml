@@ -15,7 +15,7 @@
 		<module>yd-buniness</module>
 		<module>yd-common</module>
 		<module>gateway</module>
-		<module>yd-modules</module>
+		<!--<module>yd-modules</module>-->
 	</modules>
 
 

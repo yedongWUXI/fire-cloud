@@ -4,6 +4,12 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.purgeteam.dispose.starter.exception.error.CommonErrorCode;
+import com.purgeteam.dispose.starter.exception.error.details.BusinessErrorCode;
+import com.purgeteam.dispose.starter.exception.error.details.ResponseCode;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
@@ -13,17 +19,11 @@ import java.io.Serializable;
  * @author purgeyao
  * @since 1.0
  */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Result<T> implements Serializable {
-
-    /**
-     * 是否成功
-     */
-    private Boolean succ;
-
-    /**
-     * 服务器当前时间戳
-     */
-    private Long ts = System.currentTimeMillis();
 
     /**
      * 成功数据
@@ -40,103 +40,85 @@ public class Result<T> implements Serializable {
      */
     private String msg;
 
-    public Boolean getSucc() {
-        return succ;
+
+    public static <T> Result<T> e(ResponseCode statusEnum) {
+        return e(statusEnum, null);
     }
 
-    public void setSucc(Boolean succ) {
-        this.succ = succ;
+    public static <T> Result<T> e(ResponseCode statusEnum, T data) {
+        Result<T> res = new Result<>();
+        res.setCode(statusEnum.code);
+        res.setMsg(statusEnum.msg);
+        res.setData(data);
+        return res;
     }
 
-    public Long getTs() {
-        return ts;
+
+    public static <T> Result<T> e(CommonErrorCode statusEnum) {
+        return e(statusEnum, null);
     }
 
-    public void setTs(Long ts) {
-        this.ts = ts;
+    public static <T> Result<T> e(CommonErrorCode statusEnum, T data) {
+        Result<T> res = new Result<>();
+        res.setCode(statusEnum.code);
+        res.setMsg(statusEnum.msg);
+        res.setData(data);
+        return res;
     }
 
-    public T getData() {
-        return data;
+    public static <T> Result<T> e(BusinessErrorCode statusEnum) {
+        return e(statusEnum, null);
     }
 
-    public void setData(T data) {
-        this.data = data;
+    public static <T> Result<T> e(BusinessErrorCode statusEnum, T data) {
+        Result<T> res = new Result<>();
+        res.setCode(statusEnum.code);
+        res.setMsg(statusEnum.msg);
+        res.setData(data);
+        return res;
     }
 
-    public String getCode() {
-        return code;
-    }
 
-    public void setCode(String code) {
-        this.code = code;
-    }
+//    public static <T> Result<T> ofSuccess(ResponseCode responseCode) {
+//        Result result = new Result();
+//        return result;
+//    }
 
-    public String getMsg() {
-        return msg;
-    }
+//    public static <T> Result<T> ofSuccess(Object data) {
+//        Result result = new Result();
+//        result.setData(data);
+//        return result;
+//    }
 
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
 
-    public Result() {
-    }
-
-    public Result(Boolean succ, Long ts, T data, String code, String msg) {
-        this.succ = succ;
-        this.ts = ts;
-        this.data = data;
-        this.code = code;
-        this.msg = msg;
-    }
-
-    public static Result ofSuccess() {
+    public static <T> Result<T> e(String code, String msg) {
         Result result = new Result();
-        result.succ = true;
-        return result;
-    }
-
-    public static Result ofSuccess(Object data) {
-        Result result = new Result();
-        result.succ = true;
-        result.setData(data);
-        return result;
-    }
-
-    public static Result ofFail(String code, String msg) {
-        Result result = new Result();
-        result.succ = false;
         result.code = code;
         result.msg = msg;
         return result;
     }
 
-    public static Result ofFail(String code, String msg, Object data) {
+    public static <T> Result<T> e(String code, String msg, Object data) {
         Result result = new Result();
-        result.succ = false;
         result.code = code;
         result.msg = msg;
         result.setData(data);
         return result;
     }
-
-    public static Result ofFail(CommonErrorCode resultEnum) {
-        Result result = new Result();
-        result.succ = false;
-        result.code = resultEnum.getCode();
-        result.msg = resultEnum.getMessage();
-        return result;
-    }
+//
+//    public static <T> Result<T> ofFail(CommonErrorCode resultEnum) {
+//        Result result = new Result();
+//        result.code = resultEnum.code;
+//        result.msg = resultEnum.msg;
+//        return result;
+//    }
 
     /**
      * 获取 json
      */
     public String buildResultJson() {
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("succ", this.succ);
         jsonObject.put("code", this.code);
-        jsonObject.put("ts", this.ts);
         jsonObject.put("msg", this.msg);
         jsonObject.put("data", this.data);
         return JSON.toJSONString(jsonObject, SerializerFeature.DisableCircularReferenceDetect);
@@ -145,9 +127,7 @@ public class Result<T> implements Serializable {
     @Override
     public String toString() {
         return "Result{" +
-                "succ=" + succ +
-                ", ts=" + ts +
-                ", data=" + data +
+                " data=" + data +
                 ", code='" + code + '\'' +
                 ", msg='" + msg + '\'' +
                 '}';

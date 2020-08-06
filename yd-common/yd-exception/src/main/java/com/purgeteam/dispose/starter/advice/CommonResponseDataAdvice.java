@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.purgeteam.dispose.starter.GlobalDefaultProperties;
 import com.purgeteam.dispose.starter.Result;
 import com.purgeteam.dispose.starter.annotation.IgnoreResponseAdvice;
+import com.purgeteam.dispose.starter.exception.error.details.ResponseCode;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -47,9 +48,9 @@ public class CommonResponseDataAdvice implements ResponseBodyAdvice<Object> {
         if (o == null) {
             // 当 o 返回类型为 string 并且为null会出现 java.lang.ClassCastException: Result cannot be cast to java.lang.String
             if (methodParameter.getParameterType().getName().equals("java.lang.String")) {
-                return JSON.toJSON(Result.ofSuccess()).toString();
+                return JSON.toJSON(Result.e(ResponseCode.OK)).toString();
             }
-            return Result.ofSuccess();
+            return Result.e(ResponseCode.OK);
         }
         // o is instanceof ConmmonResponse -> return o
         if (o instanceof Result) {
@@ -57,9 +58,9 @@ public class CommonResponseDataAdvice implements ResponseBodyAdvice<Object> {
         }
         // string 特殊处理 java.lang.ClassCastException: Result cannot be cast to java.lang.String
         if (o instanceof String) {
-            return JSON.toJSON(Result.ofSuccess(o)).toString();
+            return JSON.toJSON(Result.e(ResponseCode.OK, o)).toString();
         }
-        return Result.ofSuccess(o);
+        return Result.e(ResponseCode.OK, o);
     }
 
     private Boolean filter(MethodParameter methodParameter) {

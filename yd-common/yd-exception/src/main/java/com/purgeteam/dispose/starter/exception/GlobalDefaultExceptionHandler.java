@@ -5,7 +5,9 @@ import com.purgeteam.dispose.starter.Result;
 import com.purgeteam.dispose.starter.annotation.IgnoreResponseAdvice;
 import com.purgeteam.dispose.starter.exception.category.BusinessException;
 import com.purgeteam.dispose.starter.exception.error.CommonErrorCode;
+import com.purgeteam.dispose.starter.exception.error.details.ResponseCode;
 import feign.FeignException;
+import org.apache.shiro.authz.AuthorizationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -50,7 +52,7 @@ public class GlobalDefaultExceptionHandler {
     public Result handlerNoHandlerFoundException(NoHandlerFoundException e) throws Throwable {
         errorDispose(e);
         outPutErrorWarn(NoHandlerFoundException.class, CommonErrorCode.NOT_FOUND, e);
-        return Result.ofFail(CommonErrorCode.NOT_FOUND);
+        return Result.e(CommonErrorCode.NOT_FOUND);
     }
 
     /**
@@ -62,7 +64,7 @@ public class GlobalDefaultExceptionHandler {
         errorDispose(e);
         outPutErrorWarn(HttpRequestMethodNotSupportedException.class,
                 CommonErrorCode.METHOD_NOT_ALLOWED, e);
-        return Result.ofFail(CommonErrorCode.METHOD_NOT_ALLOWED);
+        return Result.e(CommonErrorCode.METHOD_NOT_ALLOWED);
     }
 
     /**
@@ -74,7 +76,7 @@ public class GlobalDefaultExceptionHandler {
         errorDispose(e);
         outPutErrorWarn(HttpMediaTypeNotSupportedException.class,
                 CommonErrorCode.UNSUPPORTED_MEDIA_TYPE, e);
-        return Result.ofFail(CommonErrorCode.UNSUPPORTED_MEDIA_TYPE);
+        return Result.e(CommonErrorCode.UNSUPPORTED_MEDIA_TYPE);
     }
 
     /**
@@ -97,8 +99,11 @@ public class GlobalDefaultExceptionHandler {
         if (cause instanceof FeignException) {
             return handlerFeignException((FeignException) cause);
         }
+        if (cause instanceof AuthorizationException) {
+            return Result.e(ResponseCode.UNAUTHORIZEDEXCEPTION);
+        }
         outPutError(Exception.class, CommonErrorCode.EXCEPTION, throwable);
-        return Result.ofFail(CommonErrorCode.EXCEPTION);
+        return Result.e(CommonErrorCode.EXCEPTION);
     }
 
     /**
@@ -108,7 +113,7 @@ public class GlobalDefaultExceptionHandler {
     public Result handlerFeignException(FeignException e) throws Throwable {
         errorDispose(e);
         outPutError(FeignException.class, CommonErrorCode.RPC_ERROR, e);
-        return Result.ofFail(CommonErrorCode.RPC_ERROR);
+        return Result.e(CommonErrorCode.RPC_ERROR);
     }
 
     /**
@@ -118,7 +123,7 @@ public class GlobalDefaultExceptionHandler {
     public Result handlerClientException(ClientException e) throws Throwable {
         errorDispose(e);
         outPutError(ClientException.class, CommonErrorCode.RPC_ERROR, e);
-        return Result.ofFail(CommonErrorCode.RPC_ERROR);
+        return Result.e(CommonErrorCode.RPC_ERROR);
     }
 
     /**
@@ -128,7 +133,7 @@ public class GlobalDefaultExceptionHandler {
     public Result handlerBusinessException(BusinessException e) throws Throwable {
         errorDispose(e);
         outPutError(BusinessException.class, CommonErrorCode.BUSINESS_ERROR, e);
-        return Result.ofFail(e.getCode(), e.getMessage());
+        return Result.e(e.getCode(), e.getMessage());
     }
 
     /**
@@ -138,9 +143,9 @@ public class GlobalDefaultExceptionHandler {
     public Result handleHttpMessageNotReadableException(HttpMessageNotReadableException e) throws Throwable {
         errorDispose(e);
         outPutError(HttpMessageNotReadableException.class, CommonErrorCode.PARAM_ERROR, e);
-        String msg = String.format("%s : 错误详情( %s )", CommonErrorCode.PARAM_ERROR.getMessage(),
+        String msg = String.format("%s : 错误详情( %s )", CommonErrorCode.PARAM_ERROR.msg,
                 e.getRootCause().getMessage());
-        return Result.ofFail(CommonErrorCode.PARAM_ERROR.getCode(), msg);
+        return Result.e(CommonErrorCode.PARAM_ERROR.code, msg);
     }
 
     /**
@@ -160,10 +165,10 @@ public class GlobalDefaultExceptionHandler {
 
         if (constraintViolations.isEmpty()) {
             log.error("validExceptionHandler error fieldErrors is empty");
-            Result.ofFail(CommonErrorCode.BUSINESS_ERROR.getCode(), "");
+            Result.e(CommonErrorCode.BUSINESS_ERROR.code, "");
         }
 
-        return Result.ofFail(CommonErrorCode.PARAM_ERROR.getCode(), smg);
+        return Result.e(CommonErrorCode.PARAM_ERROR.code, smg);
     }
 
     /**
@@ -197,11 +202,11 @@ public class GlobalDefaultExceptionHandler {
 
         if (fieldErrors.isEmpty()) {
             log.error("validExceptionHandler error fieldErrors is empty");
-            Result.ofFail(CommonErrorCode.BUSINESS_ERROR.getCode(), "");
+            Result.e(CommonErrorCode.BUSINESS_ERROR.code, "");
         }
 
         return Result
-                .ofFail(CommonErrorCode.PARAM_ERROR.getCode(), fieldErrors.get(0).getDefaultMessage());
+                .e(CommonErrorCode.PARAM_ERROR.code, fieldErrors.get(0).getDefaultMessage());
     }
 
     /**

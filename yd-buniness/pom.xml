@@ -13,6 +13,7 @@
 
     <modules>
         <module>demo-ELKB</module>
+        <module>yd-vue</module>
     </modules>
     <dependencies>
 
