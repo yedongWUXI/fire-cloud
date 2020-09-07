@@ -10,6 +10,8 @@ package com.taurus.entity;
 public class ColumnEntity {
     //列名
     private String columnName;
+    //大写列名
+    private String upperCaseColumnName;
     //列名类型
     private String dataType;
     //列名备注
@@ -78,5 +80,13 @@ public class ColumnEntity {
 
     public void setExtra(String extra) {
         this.extra = extra;
+    }
+
+    public String getUpperCaseColumnName() {
+        return upperCaseColumnName;
+    }
+
+    public void setUpperCaseColumnName(String upperCaseColumnName) {
+        this.upperCaseColumnName = upperCaseColumnName;
     }
 }

@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -60,11 +61,16 @@ public class SysLoginController extends AbstractController {
      */
     @ApiOperation(value = "登录")
     @PostMapping("/sys/login")
-    public Result login(@RequestBody SysLoginForm form) throws IOException {
+    public Result login(@RequestBody SysLoginForm form, HttpServletRequest httpServletRequest) throws IOException {
 //		boolean captcha = sysCaptchaService.validate(form.getUuid(), form.getCaptcha());
 //		if(!captcha){
 //			return R.error("验证码不正确");
 //		}
+
+
+        String name = httpServletRequest.getHeader("name");
+
+        System.out.println(name);
 
         //用户信息
         SysUserEntity user = sysUserService.queryByUserName(form.getUsername());

@@ -15,4 +15,7 @@ public class DatabaseInfos {
     String driver;
     String userName;
     String password;
+    String mainPath;
+    String packagePath;
+    String moduleName;
 }

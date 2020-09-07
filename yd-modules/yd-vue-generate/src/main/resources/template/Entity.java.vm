@@ -34,4 +34,9 @@ public class ${className}Entity implements Serializable {
     private $column.attrType $column.attrname;
     #end
 
+    #foreach ($column in $columns)
+
+        public static final String COL_${column.upperCaseColumnName} = "${column.columnName}" ;
+    #end
+
 }

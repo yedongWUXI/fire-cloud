@@ -2,6 +2,7 @@ package com.taurus.utils;
 
 import com.taurus.config.MongoManager;
 import com.taurus.entity.ColumnEntity;
+import com.taurus.entity.DatabaseInfos;
 import com.taurus.entity.TableEntity;
 import com.taurus.entity.mongo.MongoDefinition;
 import com.taurus.entity.mongo.MongoGeneratorEntity;
@@ -156,6 +157,109 @@ public class GenUtils {
             try {
                 //添加到zip
                 zip.putNextEntry(new ZipEntry(getFileName(template, tableEntity.getClassName(), config.getString("package"), config.getString("moduleName"))));
+                IOUtils.write(sw.toString(), zip, "UTF-8");
+                IOUtils.closeQuietly(sw);
+                zip.closeEntry();
+            } catch (IOException e) {
+                throw new RRException("渲染模板失败，表名：" + tableEntity.getTableName(), e);
+            }
+        }
+    }
+
+    /**
+     * 定制化生成代码
+     */
+    public static void generatorCodeCustom(Map<String, String> table,
+                                           List<Map<String, String>> columns, ZipOutputStream zip, DatabaseInfos databaseInfos) {
+        //配置信息
+        Configuration config = getConfig();
+        boolean hasBigDecimal = false;
+        boolean hasList = false;
+        //表信息
+        TableEntity tableEntity = new TableEntity();
+        tableEntity.setTableName(table.get("tableName"));
+        tableEntity.setComments(table.get("tableComment"));
+        //表名转换成Java类名
+        String className = tableToJava(tableEntity.getTableName(), config.getStringArray("tablePrefix"));
+        tableEntity.setClassName(className);
+        tableEntity.setClassname(StringUtils.uncapitalize(className));
+
+        //列信息
+        List<ColumnEntity> columsList = new ArrayList<>();
+        for (Map<String, String> column : columns) {
+            ColumnEntity columnEntity = new ColumnEntity();
+            columnEntity.setColumnName(column.get("columnName"));
+            columnEntity.setUpperCaseColumnName(column.get("columnName").toUpperCase());
+            columnEntity.setDataType(column.get("dataType"));
+            columnEntity.setComments(column.get("columnComment"));
+            columnEntity.setExtra(column.get("extra"));
+
+            //列名转换成Java属性名
+            String attrName = columnToJava(columnEntity.getColumnName());
+            columnEntity.setAttrName(attrName);
+            columnEntity.setAttrname(StringUtils.uncapitalize(attrName));
+
+            //列的数据类型，转换成Java类型
+            String attrType = config.getString(columnEntity.getDataType(), columnToJava(columnEntity.getDataType()));
+            columnEntity.setAttrType(attrType);
+
+
+            if (!hasBigDecimal && attrType.equals("BigDecimal")) {
+                hasBigDecimal = true;
+            }
+            if (!hasList && "array".equals(columnEntity.getExtra())) {
+                hasList = true;
+            }
+            //是否主键
+            if ("PRI".equalsIgnoreCase(column.get("columnKey")) && tableEntity.getPk() == null) {
+                tableEntity.setPk(columnEntity);
+            }
+
+            columsList.add(columnEntity);
+        }
+        tableEntity.setColumns(columsList);
+
+        //没主键，则第一个字段为主键
+        if (tableEntity.getPk() == null) {
+            tableEntity.setPk(tableEntity.getColumns().get(0));
+        }
+
+        //设置velocity资源加载器
+        Properties prop = new Properties();
+        prop.put("file.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
+        Velocity.init(prop);
+        String mainPath = config.getString("mainPath");
+        mainPath = StringUtils.isBlank(mainPath) ? "io.fast" : mainPath;
+        //封装模板数据
+        Map<String, Object> map = new HashMap<>();
+        map.put("tableName", tableEntity.getTableName());
+        map.put("comments", tableEntity.getComments());
+        map.put("pk", tableEntity.getPk());
+        map.put("className", tableEntity.getClassName());
+        map.put("classname", tableEntity.getClassname());
+        map.put("pathName", tableEntity.getClassname().toLowerCase());
+        map.put("columns", tableEntity.getColumns());
+        map.put("hasBigDecimal", hasBigDecimal);
+        map.put("hasList", hasList);
+        map.put("mainPath", mainPath);
+        map.put("package", databaseInfos.getPackagePath());
+        map.put("moduleName", databaseInfos.getModuleName());
+        map.put("author", config.getString("author"));
+        map.put("email", config.getString("email"));
+        map.put("datetime", DateUtils.format(new Date(), DateUtils.DATE_TIME_PATTERN));
+        VelocityContext context = new VelocityContext(map);
+
+        //获取模板列表
+        List<String> templates = getTemplates();
+        for (String template : templates) {
+            //渲染模板
+            StringWriter sw = new StringWriter();
+            Template tpl = Velocity.getTemplate(template, "UTF-8");
+            tpl.merge(context, sw);
+
+            try {
+                //添加到zip
+                zip.putNextEntry(new ZipEntry(getFileName(template, tableEntity.getClassName(), databaseInfos.getPackagePath(), databaseInfos.getModuleName())));
                 IOUtils.write(sw.toString(), zip, "UTF-8");
                 IOUtils.closeQuietly(sw);
                 zip.closeEntry();
