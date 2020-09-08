@@ -1,6 +1,4 @@
-package
-
-import org.springframework.web.bind.annotation.RequestMethod;${package}.${moduleName}.controller;
+package ${package}.${moduleName}.controller;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -61,7 +59,7 @@ public class ${className}Controller {
     @ApiOperation(value = "保存")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @RequiresPermissions("${moduleName}:${pathName}:save")
-    public void save(@RequestBody${className}Entity ${classname}) {
+    public void save(@RequestBody ${className}Entity ${classname}) {
             ${classname}Service.save(${classname});
 
     }
@@ -72,7 +70,7 @@ public class ${className}Controller {
     @ApiOperation(value = "修改")
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @RequiresPermissions("${moduleName}:${pathName}:update")
-    public void update(@RequestBody${className}Entity ${classname}) {
+    public void update(@RequestBody ${className}Entity ${classname}) {
             ${classname}Service.updateById(${classname});
 
     }

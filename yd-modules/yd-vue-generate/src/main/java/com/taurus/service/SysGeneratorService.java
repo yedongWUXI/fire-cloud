@@ -95,7 +95,7 @@ public class SysGeneratorService {
                 //查询列信息
                 List<Map<String, String>> columns = tableInfos.getColumns();
                 //生成代码
-                GenUtils.generatorCode(table, columns, zip);
+                GenUtils.generatorCodeCustom(table, columns, zip,databaseInfos);
             }
 
         }
@@ -108,7 +108,7 @@ public class SysGeneratorService {
                 //查询列信息
                 List<Map<String, String>> columns = tableInfos.getColumns();
                 //生成代码
-                GenUtils.generatorCode(table, columns, zip);
+                GenUtils.generatorCodeCustom(table, columns, zip,databaseInfos);
             }
 
         }
@@ -121,7 +121,7 @@ public class SysGeneratorService {
                 //查询列信息
                 List<Map<String, String>> columns = tableInfos.getColumns();
                 //生成代码
-                GenUtils.generatorCode(table, columns, zip);
+                GenUtils.generatorCodeCustom(table, columns, zip,databaseInfos);
             }
 
         }
@@ -134,7 +134,7 @@ public class SysGeneratorService {
                 //查询列信息
                 List<Map<String, String>> columns = tableInfos.getColumns();
                 //生成代码
-                GenUtils.generatorCode(table, columns, zip);
+                GenUtils.generatorCodeCustom(table, columns, zip,databaseInfos);
             }
 
         }
