@@ -64,6 +64,8 @@
                 this.dataForm.${column.attrname} = data.data.${column.attrname}
 #end
 #end
+              } else {
+                #[[this.$message.error(data.msg)]]#
               }
             })
           }
