@@ -31,7 +31,7 @@ public class MongoManager {
      * 当前配置是否为mongo内容
      */
     public static boolean isMongo() {
-        return DbConfig.isMongo();
+        return false;
     }
 
 

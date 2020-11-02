@@ -11,19 +11,10 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>yd-moduleone</module>
-        <module>yd-dbdoc-generate</module>
-        <module>yd-code-generate</module>
+        <!--<module>yd-moduleone</module>-->
+        <!--<module>yd-dbdoc-generate</module>-->
+        <!--<module>yd-code-generate</module>-->
         <module>yd-vue-generate</module>
     </modules>
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>com.taurus</groupId>
-                <artifactId>yd-modulesone</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
 </project>

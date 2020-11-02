@@ -10,7 +10,7 @@ import lombok.Data;
  */
 @Data
 public class DatabaseInfos {
-    String tableName;
+    String tableNames;
     String url;
     String driver;
     String userName;
