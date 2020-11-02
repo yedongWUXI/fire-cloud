@@ -33,11 +33,11 @@ password: Root1234!
 #    password: 123456
 
 {
-	"driver": "driverClassName: com.mysql.cj.jdbc.Driver",
-	"url": "url: jdbc:mysql://ip:3306/vue-fast?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai",
+	"driver": "com.mysql.cj.jdbc.Driver",
+	"url": "jdbc:mysql://ip:3306/vue-fast?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai",
 	"userName": "root",
 	"password": "Root1234!",
-	"tableNames": "dictionary,sys_log,",
+	"tableNames": "dictionary,sys_log",
 	"mainPath": "com.taurus",
 	"packagePath": "com.taurus.core",
 	"moduleName": "dictionary"
